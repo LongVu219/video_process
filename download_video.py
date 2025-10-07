@@ -1,36 +1,30 @@
-from pytube import YouTube
+import yt_dlp
 import os
+import subprocess
 
-def download_youtube_video(url: str, output_path: str):
-    """
-    Download a YouTube video to the given local path.
+def download_and_trim(url, output_path="./video_data"):
+    os.makedirs(output_path, exist_ok=True)
+    temp_file = os.path.join(output_path, "full.mp4")
+    final_file = os.path.join(output_path, "clip.mp4")
 
-    Args:
-        url (str): YouTube video URL.
-        output_path (str): Folder path where the video will be saved.
-    """
-    try:
-        # Create output directory if it doesn't exist
-        os.makedirs(output_path, exist_ok=True)
+    ydl_opts = {
+        "format": "bestvideo+bestaudio/best",
+        "outtmpl": temp_file,
+        "merge_output_format": "mp4"
+    }
 
-        # Initialize YouTube object
-        yt = YouTube(url)
-        print(f"Title: {yt.title}")
-        print(f"Author: {yt.author}")
-        print("Downloading...")
+    with yt_dlp.YoutubeDL(ydl_opts) as ydl:
+        ydl.download([url])
 
-        # Get the highest resolution stream
-        stream = yt.streams.get_highest_resolution()
+    # Trim with ffmpeg: from 1s to 25s
+    subprocess.run([
+        "ffmpeg", "-y",
+        "-ss", "1", "-to", "6",
+        "-i", temp_file,
+        "-c", "copy", final_file
+    ])
 
-        # Download video
-        stream.download(output_path=output_path)
-
-        print(f"✅ Download completed: {os.path.join(output_path, yt.title)}.mp4")
-
-    except Exception as e:
-        print(f"❌ Error: {e}")
+    print(f"✅ Saved segment to {final_file}")
 
 if __name__ == "__main__":
-    video_url = input("Enter YouTube URL: ").strip()
-    save_path = input("Enter local save path (e.g., C:/Videos or ./videos): ").strip()
-    download_youtube_video(video_url, save_path)
+    download_and_trim("https://www.youtube.com/watch?v=csPc9jLYA5U")
