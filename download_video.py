@@ -2,6 +2,8 @@ import yt_dlp
 import os
 import subprocess
 
+#download the video and cut it by ffmpeg (too bad for spp)
+
 def download_and_trim(url, output_path="./video_data"):
     os.makedirs(output_path, exist_ok=True)
     temp_file = os.path.join(output_path, "full.mp4")
@@ -19,7 +21,7 @@ def download_and_trim(url, output_path="./video_data"):
     # Trim with ffmpeg: from 1s to 25s
     subprocess.run([
         "ffmpeg", "-y",
-        "-ss", "1", "-to", "6",
+        "-ss", "4", "-to", "7",
         "-i", temp_file,
         "-c", "copy", final_file
     ])
