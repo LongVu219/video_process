@@ -10,10 +10,11 @@ def download_and_trim(url, output_path="./video_data"):
     final_file = os.path.join(output_path, "clip.mp4")
 
     ydl_opts = {
-        "format": "bestvideo+bestaudio/best",
+        "format": "bv*[vcodec^=avc1]+ba/best[ext=mp4]",
         "outtmpl": temp_file,
         "merge_output_format": "mp4"
     }
+
 
     with yt_dlp.YoutubeDL(ydl_opts) as ydl:
         ydl.download([url])
