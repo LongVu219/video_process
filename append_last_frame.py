@@ -63,9 +63,9 @@ def main():
 
     frames, fps = read_all_frames(args.input)
     frames = ensure_81_frames(frames, truncate=args.truncate)
-    write_video(frames, args.output, fps)
+    write_video(frames, args.output, 16)
 
-    print(f"Done. Saved to {args.output} ({len(frames)} frames at ~{fps:.2f} fps).")
+    print(f"Done. Saved to {args.output} ({len(frames)} frames at 16 fps).")
 
 if __name__ == "__main__":
     main()
