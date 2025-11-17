@@ -22,7 +22,7 @@ def download_and_trim(url, output_path="./video_data"):
     # Trim with ffmpeg: from 1s to 25s
     subprocess.run([
         "ffmpeg", "-y",
-        "-ss", "4", "-to", "7",
+        "-ss", "2", "-to", "7",
         "-i", temp_file,
         "-c", "copy", final_file
     ])
@@ -30,4 +30,4 @@ def download_and_trim(url, output_path="./video_data"):
     print(f"✅ Saved segment to {final_file}")
 
 if __name__ == "__main__":
-    download_and_trim("https://www.youtube.com/watch?v=csPc9jLYA5U")
+    download_and_trim("https://www.youtube.com/watch?v=3FXUw98rrUY")
